@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>마음톡 | 3–4세 첫 시청각 AAC</title>
+<meta name="description" content="그림을 누르면 한국어 음성으로 말하는 3–4세 아동용 모바일 AAC 보드" />
+<meta name="theme-color" content="#fffcf5" />
+<link rel="icon" href="favicon.svg" />
+<link rel="apple-touch-icon" href="icon-192.png" />
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="마음톡" />
+<meta property="og:title" content="마음톡 | 그림을 누르면, 내 마음이 들려요" />
+<meta property="og:description" content="3–4세 아동을 위한 쉽고 선명한 모바일 AAC 보드" />
+<meta property="og:image" content="og.png" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<style>
+:root{--ink:#24322c;--green:#247359;--paper:#fffcf5;--line:#dedfd8}
+*{box-sizing:border-box}
+html{background:#dce8e2}
+body{margin:0;background:#dce8e2;color:var(--ink);font-family:Arial,"Apple SD Gothic Neo","Noto Sans KR",sans-serif}
+button{font:inherit;color:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+button:focus-visible{outline:4px solid #155cff;outline-offset:3px}
+.phone-shell{width:min(100%,720px);min-height:100dvh;margin:auto;background:var(--paper);box-shadow:0 0 42px #2f534329;padding-bottom:174px}
+.simple-header{height:70px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.logo{font-size:25px;font-weight:950;letter-spacing:-1.5px;color:var(--green)}
+.adult-button{border:1px solid #cfd8d3;background:#fff;border-radius:999px;padding:9px 12px;font-size:12px;font-weight:800}
+.adult-guide{margin:12px 14px 0;padding:15px;border-radius:16px;background:#eef6f1;border:1px solid #bfd7cb;line-height:1.55}
+.adult-guide strong{font-size:16px}
+.adult-guide p{margin:7px 0;font-size:13px}
+.adult-guide p b{color:var(--green)}
+.adult-guide small{color:#68766f}
+.voice-bar{min-height:94px;margin:14px;display:flex;align-items:center;gap:12px;border:2px dashed #aebbb4;border-radius:22px;padding:12px 14px;background:#fff}
+.voice-bar.has-message{border:4px solid #167451;background:#f7fffb}
+.voice-bar.has-message strong{font-size:22px;color:#125c43}
+.voice-bar>.pictogram{width:62px;height:62px;flex:0 0 62px;border-radius:16px}
+.tap-hand{font-size:40px;width:55px;text-align:center}
+.voice-bar div{min-width:0;display:flex;flex-direction:column;gap:4px}
+.voice-bar small{font-size:12px;color:#718079;font-weight:700}
+.voice-bar strong{font-size:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.voice-bar button{margin-left:auto;flex:0 0 62px;height:62px;border:0;border-radius:17px;background:var(--green);color:#fff;font-size:20px;font-weight:900;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.voice-bar button span{font-size:10px;margin-top:3px}
+.communication-board{padding:8px 14px 22px}
+.section-title{display:flex;align-items:center;gap:10px;margin:3px 2px 15px}
+.section-title>span{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#eaf1ed;font-size:24px}
+.section-title h1{margin:0;font-size:23px;letter-spacing:-.8px}
+.section-title p{margin:3px 0 0;color:#758078;font-size:12px;font-weight:700}
+.picture-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.picture-card{border:2px solid #d0d3cc;border-radius:24px;min-height:211px;padding:9px 9px 14px;background:#fff;display:flex;flex-direction:column;align-items:center;position:relative;box-shadow:0 5px 0 #d8d8d0;transition:transform .12s,box-shadow .12s}
+.picture-card:active{transform:translateY(4px);box-shadow:0 1px 0 #c7cac3;border-color:#26785c}
+.pictogram{display:block;width:100%;aspect-ratio:1/1;background-image:url('aac-pictograms-v2.png');background-size:400% 400%;background-position:var(--x) var(--y);background-repeat:no-repeat;border-radius:18px}
+.pictogram.single-image{background-size:cover;background-position:center}
+.action-image{background-image:url('aac-essential-actions-v4.png');background-size:300% 200%;background-position:var(--x) var(--y)}
+.picture-card strong{font-size:20px;letter-spacing:-.7px;margin-top:8px}
+.audio-mark{margin-top:5px;border-radius:999px;background:#fff9;padding:4px 8px;font-size:10px;color:#53645c;font-weight:900}
+.picture-card.peach{background:#f8e5d4}
+.picture-card.yellow{background:#f7e9ac}
+.picture-card.mint{background:#dcefe5}
+.picture-card.rose{background:#f5dfdc}
+.picture-card.blue{background:#deedf4}
+.picture-card.selected{border:6px solid #167451;transform:scale(1.055);box-shadow:0 9px 0 #b9d9cb;z-index:2;animation:card-pop .42s ease-out}
+.picture-card.selected .audio-mark{background:#167451;color:#fff}
+@keyframes card-pop{0%{transform:scale(.92)}65%{transform:scale(1.08)}100%{transform:scale(1.055)}}
+.record-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;padding:10px;border-radius:12px;margin:10px 0}
+.record-row span{font-size:13px;font-weight:800}
+.record-row button,.saved-row button{border:0;border-radius:10px;padding:9px 11px;font-size:12px;font-weight:900;background:#247359;color:#fff}
+.record-row button:disabled{background:#b8c1bd}
+.record-row button.recording{background:#c43d3d;animation:record-pulse 1s infinite}
+.saved-row{display:flex;gap:8px;margin-bottom:9px}
+.saved-row button:last-child{background:#777}
+.adult-guide>small{display:block;color:#24634f;font-weight:800}
+@keyframes record-pulse{50%{opacity:.55}}
+.essential-bar{position:fixed;z-index:6;bottom:88px;left:50%;transform:translateX(-50%);width:min(100%,720px);height:72px;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:7px 12px;background:#fff8ee;border-top:1px solid #e7d7c8;box-shadow:0 -5px 15px #442a1512}
+.essential-bar button{border:2px solid #d5b6a8;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:9px;font-size:18px;font-weight:950}
+.essential-bar .pictogram{width:49px;height:49px;flex:0 0 49px;border-radius:12px}
+.essential-bar .stop{background:#ffe1da;color:#9f291d}
+.essential-bar .pain{background:#fff0cf;color:#8e451e}
+.essential-bar button.selected{border:5px solid #167451;transform:scale(1.04)}
+.bottom-nav{position:fixed;z-index:5;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,720px);height:88px;padding:8px 8px max(8px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(4,1fr);gap:4px;background:#fff;border-top:1px solid #d7dad4;box-shadow:0 -8px 24px #34473e14}
+.bottom-nav button{border:0;background:transparent;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#707a75}
+.bottom-nav button span{font-size:23px}
+.bottom-nav button b{font-size:11px;letter-spacing:-.4px}
+.bottom-nav button.active{background:#e4f1eb;color:#185f49}
+.bottom-nav button.active span{transform:scale(1.08)}
+@media(min-width:600px){.picture-grid{max-width:540px;margin:0 auto}.picture-card{min-height:230px}.communication-board{padding-inline:20px}.voice-bar{margin-inline:20px}}
+@media(max-width:370px){.picture-card{min-height:185px}.picture-card strong{font-size:18px}.bottom-nav button b{font-size:10px}.essential-bar button{font-size:16px}.essential-bar .pictogram{width:43px;height:43px;flex-basis:43px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}.picture-card.selected,.record-row button.recording{animation:none}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+"use strict";
+
+/* ---------- 데이터 ---------- */
+const categories = [
+  { id:"daily", label:"꼭 필요한 말", icon:"💬", prompt:"지금 필요한 말을 골라요", cards:[
+    { id:"no", label:"싫어요", short:"싫어요", action:0, color:"rose" },
+    { id:"help", label:"도와주세요", short:"도와주세요", action:2, color:"mint" },
+    { id:"toilet", label:"화장실 가고 싶어요", short:"화장실", action:3, color:"blue" },
+    { id:"more", label:"더 주세요", short:"더 주세요", image:0, color:"peach" },
+  ]},
+  { id:"food", label:"먹고 싶어요", icon:"🥄", prompt:"먹거나 마시고 싶은 것을 골라요", cards:[
+    { id:"water", label:"물 주세요", short:"물", image:6, color:"blue" },
+    { id:"milk", label:"우유 주세요", short:"우유", image:7, color:"blue" },
+    { id:"gummy", label:"젤리 주세요", short:"젤리", src:"aac-gummy-bears-v3.png", color:"yellow" },
+    { id:"rice", label:"밥 주세요", short:"밥", src:"aac-rice-bowl-v3.png", color:"rose" },
+  ]},
+  { id:"play", label:"하고 싶어요", icon:"🧸", prompt:"지금 하고 싶은 것을 골라요", cards:[
+    { id:"bear", label:"곰 인형 주세요", short:"곰 인형", image:10, color:"yellow" },
+    { id:"book", label:"책 주세요", short:"책", image:11, color:"blue" },
+    { id:"outside", label:"밖에 가고 싶어요", short:"밖에 가기", image:12, color:"mint" },
+    { id:"rest", label:"쉬고 싶어요", short:"쉬기", image:13, color:"peach" },
+  ]},
+  { id:"feeling", label:"내 마음", icon:"❤️", prompt:"지금 내 마음을 골라요", cards:[
+    { id:"yes", label:"좋아요", short:"좋아요", image:4, color:"mint" },
+    { id:"wait", label:"기다려 주세요", short:"기다려요", image:5, color:"yellow" },
+    { id:"happy", label:"기뻐요", short:"기뻐요", image:14, color:"yellow" },
+    { id:"sad", label:"슬퍼요", short:"슬퍼요", image:15, color:"blue" },
+  ]},
+];
+
+const fixedCards = [
+  { id:"stop", label:"그만해요", short:"그만해요", action:1, color:"stop" },
+  { id:"pain", label:"아파요", short:"아파요", action:4, color:"pain" },
+];
+
+/* ---------- 녹음 음성 저장 (IndexedDB, 이 기기 전용) ---------- */
+function openVoiceDB(){
+  return new Promise((resolve,reject)=>{
+    const request = indexedDB.open("maeumtalk-voices",1);
+    request.onupgradeneeded = ()=> request.result.createObjectStore("voices");
+    request.onsuccess = ()=> resolve(request.result);
+    request.onerror = ()=> reject(request.error);
+  });
+}
+async function saveVoice(id,blob){
+  const db = await openVoiceDB();
+  return new Promise((resolve,reject)=>{
+    const tx = db.transaction("voices","readwrite");
+    tx.objectStore("voices").put(blob,id);
+    tx.oncomplete = ()=> resolve();
+    tx.onerror = ()=> reject(tx.error);
+  });
+}
+async function getVoice(id){
+  const db = await openVoiceDB();
+  return new Promise((resolve,reject)=>{
+    const r = db.transaction("voices").objectStore("voices").get(id);
+    r.onsuccess = ()=> resolve(r.result);
+    r.onerror = ()=> reject(r.error);
+  });
+}
+async function deleteVoice(id){
+  const db = await openVoiceDB();
+  return new Promise((resolve)=>{
+    const tx = db.transaction("voices","readwrite");
+    tx.objectStore("voices").delete(id);
+    tx.oncomplete = ()=> resolve();
+  });
+}
+
+/* ---------- 음성 재생 ---------- */
+function systemSpeak(text){
+  if(!("speechSynthesis" in window)) return;
+  window.speechSynthesis.cancel();
+  const voice = new SpeechSynthesisUtterance(text);
+  voice.lang = "ko-KR"; voice.rate = .76; voice.pitch = 1.06;
+  window.speechSynthesis.speak(voice);
+}
+async function playCard(card){
+  try {
+    const blob = await getVoice(card.id);
+    if(blob){
+      const audio = new Audio(URL.createObjectURL(blob));
+      audio.onended = ()=> URL.revokeObjectURL(audio.src);
+      await audio.play();
+      return;
+    }
+  } catch {}
+  systemSpeak(card.label);
+}
+
+/* ---------- 픽토그램 ---------- */
+function pictogramHTML(card){
+  if(card.src){
+    return `<span class="pictogram single-image" style="background-image:url('${card.src}')" aria-hidden="true"></span>`;
+  }
+  if(card.action !== undefined){
+    const x = (card.action % 3) * 50;
+    const y = Math.floor(card.action / 3) * 100;
+    return `<span class="pictogram action-image" style="--x:${x}%;--y:${y}%" aria-hidden="true"></span>`;
+  }
+  const index = card.image ?? 0;
+  const x = (index % 4) * 33.3333;
+  const y = Math.floor(index / 4) * 33.3333;
+  return `<span class="pictogram" style="--x:${x}%;--y:${y}%" aria-hidden="true"></span>`;
+}
+
+/* ---------- 상태 ---------- */
+const state = { activeId:"daily", selected:null, guide:false, recording:false, hasRecording:false, notice:"" };
+let recorder = null;
+let chunks = [];
+
+function activeCategory(){ return categories.find(c=>c.id===state.activeId); }
+function findCard(id){
+  for(const c of categories){ const f = c.cards.find(k=>k.id===id); if(f) return f; }
+  return fixedCards.find(k=>k.id===id) || null;
+}
+function setState(patch){ Object.assign(state, patch); render(); }
+
+/* ---------- 동작 ---------- */
+function choose(card){
+  setState({ selected:card, hasRecording:false });
+  if(navigator.vibrate) navigator.vibrate(45);
+  getVoice(card.id).then(v=>{
+    if(state.selected && state.selected.id === card.id) setState({ hasRecording:Boolean(v) });
+  }).catch(()=>{});
+  playCard(card);
+}
+async function startRecording(){
+  if(!state.selected) return;
+  const target = state.selected;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    const rec = new MediaRecorder(stream);
+    chunks = [];
+    rec.ondataavailable = e=> chunks.push(e.data);
+    rec.onstop = async ()=>{
+      const blob = new Blob(chunks, {type:rec.mimeType});
+      await saveVoice(target.id, blob);
+      stream.getTracks().forEach(t=>t.stop());
+      const stillSame = state.selected && state.selected.id === target.id;
+      setState({ recording:false, hasRecording: stillSame ? true : state.hasRecording, notice:`“${target.label}” 녹음을 저장했어요.` });
+    };
+    recorder = rec;
+    rec.start();
+    setState({ recording:true, notice:"아이에게 들려줄 말을 천천히 말해 주세요." });
+    window.setTimeout(()=>{ if(rec.state==="recording") rec.stop(); }, 5000);
+  } catch {
+    setState({ notice:"마이크 사용을 허용해 주세요." });
+  }
+}
+function stopRecording(){ if(recorder && recorder.state==="recording") recorder.stop(); }
+async function removeRecording(){
+  if(!state.selected) return;
+  await deleteVoice(state.selected.id);
+  setState({ hasRecording:false, notice:"녹음을 지웠어요. 기본 음성을 사용합니다." });
+}
+
+/* ---------- 렌더 ---------- */
+function render(){
+  const active = activeCategory();
+  const sel = state.selected;
+
+  const guideHTML = state.guide ? `
+    <section class="adult-guide">
+      <strong>보호자 목소리 녹음</strong>
+      <p>먼저 아이 화면에서 그림을 하나 선택한 뒤 녹음하세요. 이 기기에만 안전하게 저장됩니다.</p>
+      <div class="record-row">
+        <span>${sel ? `선택: ${sel.label}` : "먼저 그림을 선택해 주세요"}</span>
+        <button data-role="record-toggle" ${sel?"":"disabled"} class="${state.recording?"recording":""}">${state.recording?"■ 저장":"● 녹음"}</button>
+      </div>
+      ${sel && state.hasRecording ? `<div class="saved-row"><button data-role="play-recording">▶ 녹음 듣기</button><button data-role="remove-recording">녹음 지우기</button></div>` : ""}
+      ${state.notice ? `<small>${state.notice}</small>` : ""}
+    </section>` : "";
+
+  const voiceBarHTML = sel
+    ? `${pictogramHTML(sel)}<div><small>내가 말했어요</small><strong>${sel.label}</strong></div><button data-role="replay" aria-label="선택한 말 다시 듣기">▶<span>다시 듣기</span></button>`
+    : `<span class="tap-hand">☝️</span><div><small>그림을 누르면</small><strong>소리로 말해줘요</strong></div>`;
+
+  const cardsHTML = active.cards.map(card=>`
+    <button class="picture-card ${card.color} ${sel && sel.id===card.id?"selected":""}" data-role="choose" data-id="${card.id}" aria-label="${card.label}. 누르면 말해요">
+      ${pictogramHTML(card)}<strong>${card.short}</strong><span class="audio-mark">소리 ▶</span>
+    </button>`).join("");
+
+  const essentialHTML = fixedCards.map(card=>`
+    <button class="${card.color} ${sel && sel.id===card.id?"selected":""}" data-role="choose" data-id="${card.id}">
+      ${pictogramHTML(card)}<strong>${card.short}</strong>
+    </button>`).join("");
+
+  const navHTML = categories.map(cat=>`
+    <button class="${state.activeId===cat.id?"active":""}" data-role="nav" data-id="${cat.id}">
+      <span>${cat.icon}</span><b>${cat.label.replace(" 싶어요","")}</b>
+    </button>`).join("");
+
+  document.getElementById("app").innerHTML = `
+    <main class="phone-shell">
+      <header class="simple-header">
+        <div class="logo">마음톡</div>
+        <button class="adult-button" data-role="toggle-guide" aria-expanded="${state.guide}">보호자 설정 ${state.guide?"×":"⚙"}</button>
+      </header>
+      ${guideHTML}
+      <section class="voice-bar ${sel?"has-message":""}" aria-live="polite">${voiceBarHTML}</section>
+      <section class="communication-board">
+        <div class="section-title"><span>${active.icon}</span><div><h1>${active.label}</h1><p>${active.prompt}</p></div></div>
+        <div class="picture-grid">${cardsHTML}</div>
+      </section>
+      <aside class="essential-bar" aria-label="항상 사용하는 말">${essentialHTML}</aside>
+      <nav class="bottom-nav" aria-label="말하기 주제">${navHTML}</nav>
+    </main>`;
+}
+
+/* ---------- 이벤트 (위임) ---------- */
+document.getElementById("app").addEventListener("click", (e)=>{
+  const el = e.target.closest("[data-role]");
+  if(!el) return;
+  const role = el.getAttribute("data-role");
+  const id = el.getAttribute("data-id");
+  if(role==="toggle-guide"){ setState({ guide:!state.guide }); }
+  else if(role==="choose"){ const card = findCard(id); if(card) choose(card); }
+  else if(role==="replay"){ if(state.selected) playCard(state.selected); }
+  else if(role==="record-toggle"){ state.recording ? stopRecording() : startRecording(); }
+  else if(role==="play-recording"){ if(state.selected) playCard(state.selected); }
+  else if(role==="remove-recording"){ removeRecording(); }
+  else if(role==="nav"){ setState({ activeId:id, selected:null }); }
+});
+
+render();
+
+/* ---------- PWA ---------- */
+if("serviceWorker" in navigator){
+  window.addEventListener("load", ()=> navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "마음톡 — 첫 시청각 AAC",
+  "short_name": "마음톡",
+  "description": "그림을 누르면 한국어 음성으로 말하는 3–4세 아동용 모바일 AAC 보드",
+  "lang": "ko",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#dce8e2",
+  "theme_color": "#fffcf5",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
