@@ -165,12 +165,36 @@ async function deleteVoice(id){
 }
 
 /* ---------- 음성 재생 ---------- */
+// 남성·자연스러운 한국어 음성 선택. 기기에 남성 음성이 있으면 우선 사용,
+// 없으면 기본(여성) 음성의 톤을 낮춰 남성적으로 들리게 합니다.
+const MALE_KO = [/injoon/i, /hyunsu/i, /\breed\b/i, /\beddy\b/i, /grandpa/i, /rocko/i, /minsu/i, /남성/, /남자/];
+let koVoice = null;
+function pickKoreanVoice(){
+  if(!("speechSynthesis" in window)) return;
+  const ko = speechSynthesis.getVoices().filter(v => /^ko/i.test(v.lang));
+  if(!ko.length) return;
+  for(const rx of MALE_KO){
+    const hit = ko.find(v => rx.test(v.name));
+    if(hit){ koVoice = hit; return; }
+  }
+  koVoice = ko.find(v => v.default) || ko[0]; // 남성 음성 없음 → 기본 음성 + 낮은 톤
+}
+function isMaleVoice(v){ return !!v && MALE_KO.some(rx => rx.test(v.name)); }
+if("speechSynthesis" in window){
+  pickKoreanVoice();
+  speechSynthesis.onvoiceschanged = pickKoreanVoice; // 음성 목록 지연 로딩 대응
+}
+
 function systemSpeak(text){
   if(!("speechSynthesis" in window)) return;
+  if(!koVoice) pickKoreanVoice();
   window.speechSynthesis.cancel();
-  const voice = new SpeechSynthesisUtterance(text);
-  voice.lang = "ko-KR"; voice.rate = .76; voice.pitch = 1.06;
-  window.speechSynthesis.speak(voice);
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "ko-KR";
+  if(koVoice) u.voice = koVoice;
+  u.rate = 0.9;                                  // 기존 0.76(느림) → 더 자연스럽게
+  u.pitch = isMaleVoice(koVoice) ? 0.92 : 0.7;   // 남성 음성이면 자연 톤 / 아니면 톤 낮춰 남성적으로
+  window.speechSynthesis.speak(u);
 }
 async function playCard(card){
   try {
