@@ -107,6 +107,24 @@ button:focus-visible{outline:4px solid var(--focus);outline-offset:3px}
 }
 @media(min-width:600px){.picture-grid{max-width:540px;margin:0 auto}.picture-card{min-height:230px}.communication-board{padding-inline:20px}.voice-bar{margin-inline:20px}}
 @media(max-width:370px){.picture-card{min-height:185px}.picture-card strong{font-size:18px}.bottom-nav button b{font-size:10px}.essential-bar button{font-size:16px}.essential-bar .pictogram{width:43px;height:43px;flex-basis:43px}}
+/* 사용법 메뉴얼 */
+.manual-overlay{position:fixed;inset:0;z-index:20;background:rgba(30,45,38,.5);display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(2px)}
+.manual-sheet{width:min(100%,560px);max-height:92dvh;background:var(--paper);border-radius:26px 26px 0 0;display:flex;flex-direction:column;box-shadow:0 -10px 40px rgba(20,50,35,.3);animation:sheet-up .3s var(--ease)}
+@keyframes sheet-up{from{transform:translateY(30px);opacity:.4}to{transform:translateY(0);opacity:1}}
+.manual-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 12px;border-bottom:1px solid var(--line)}
+.manual-head b{font-size:20px;color:var(--green);letter-spacing:-.6px}
+.manual-head small{display:block;color:var(--ink-soft);font-size:12px;font-weight:700;margin-top:3px}
+.manual-x{border:0;background:#eef2ef;border-radius:12px;width:38px;height:38px;font-size:16px;font-weight:900;color:var(--ink-soft)}
+.manual-body{overflow-y:auto;padding:16px 20px 8px;-webkit-overflow-scrolling:touch}
+.m-intro{margin:0 0 16px;font-size:14.5px;line-height:1.6;background:var(--green-soft);border:1px solid #cbe3d6;border-radius:16px;padding:13px 15px}
+.m-step{display:flex;gap:13px;margin-bottom:16px}
+.m-num{flex:0 0 30px;height:30px;border-radius:999px;background:var(--green);color:#fff;font-weight:900;display:grid;place-items:center;font-size:15px;margin-top:2px}
+.m-step b{font-size:16px;letter-spacing:-.4px}
+.m-step p{margin:5px 0 0;font-size:14px;line-height:1.62;color:#4a544e}
+.m-step b b, .m-step p b, .m-intro b{color:var(--green-deep)}
+.m-tip{background:#fff7e9;border:1px solid #efdcbb;border-radius:16px;padding:13px 15px;font-size:13.5px;line-height:1.6;margin:4px 0 6px}
+.manual-done{margin:8px 20px max(16px,env(safe-area-inset-bottom));border:0;border-radius:16px;padding:16px;font-size:17px;font-weight:900;background:var(--green);color:#fff;box-shadow:0 5px 0 var(--green-deep)}
+.manual-done:active{transform:translateY(4px);box-shadow:none}
 /* 화면 잠금 */
 .logo{cursor:default;-webkit-user-select:none;user-select:none;touch-action:manipulation}
 .lock-badge{display:inline-flex;align-items:center;gap:5px;border:2px solid #e4ddcd;background:#fff;border-radius:999px;padding:9px 14px;font-size:12.5px;font-weight:800;color:#9a7b3e;-webkit-user-select:none;user-select:none}
@@ -312,7 +330,7 @@ function pictogramHTML(card){
 
 /* ---------- 상태 ---------- */
 const state = { activeId:"daily", selected:null, guide:false, recording:false, hasRecording:false, notice:"",
-                sentenceMode:false, sentence:[], speaking:false, recordedCount:0, locked:false };
+                sentenceMode:false, sentence:[], speaking:false, recordedCount:0, locked:false, manual:false };
 let recorder = null;
 let chunks = [];
 
@@ -401,6 +419,10 @@ function render(){
   const guideHTML = state.guide ? `
     <section class="adult-guide">
       <div class="record-row">
+        <span>처음이세요? 사용법을 확인하세요</span>
+        <button data-role="open-manual">📖 사용법 보기</button>
+      </div>
+      <div class="record-row">
         <span>화면 잠금 (아이가 못 바꾸게)</span>
         <button data-role="toggle-lock">🔒 잠그기</button>
       </div>
@@ -439,6 +461,46 @@ function render(){
       </div>
     </section>`;
 
+  const manualHTML = state.manual ? `
+    <div class="manual-overlay" data-role="manual-backdrop">
+      <div class="manual-sheet" role="dialog" aria-label="마음톡 사용법">
+        <div class="manual-head">
+          <div><b>마음톡 사용법</b><small>말이 서툰 아이의 첫 그림 대화</small></div>
+          <button class="manual-x" data-role="close-manual" aria-label="닫기">✕</button>
+        </div>
+        <div class="manual-body">
+          <p class="m-intro">아이가 <b>그림을 누르면 소리로 말해주는</b> 앱이에요. 말이 아직 서툰 아이가 마음을 전할 수 있어요. 아래 순서대로만 하시면 됩니다. 🙂</p>
+
+          <div class="m-step"><span class="m-num">1</span><div>
+            <b>그림을 눌러 말해요</b>
+            <p>아이가 원하는 그림 카드를 누르면, 그 말을 <b>소리로 대신</b> 해줘요. 위쪽 띠에 방금 말한 게 보여요.</p></div></div>
+
+          <div class="m-step"><span class="m-num">2</span><div>
+            <b>주제를 바꿔요</b>
+            <p>맨 아래 <b>꼭 필요한 말 · 먹고 · 하고 · 내 마음</b> 버튼으로 그림을 바꿔요. 화면 아래 <b>그만해요 · 아파요</b> 는 항상 보여요.</p></div></div>
+
+          <div class="m-step"><span class="m-num">3</span><div>
+            <b>우리 목소리를 넣어요 (선택)</b>
+            <p><b>보호자 설정</b> → 그림을 하나 고른 뒤 <b>● 녹음</b> → 엄마·아빠 목소리로 바꿀 수 있어요. 이 폰에만 저장돼요. 지우려면 <b>전체 지우기</b>.</p></div></div>
+
+          <div class="m-step"><span class="m-num">4</span><div>
+            <b>낱말을 이어 문장 만들기 (선택)</b>
+            <p><b>보호자 설정 → 문장 만들기 켜기.</b> 그림을 차례로 누르면 낱말이 쌓이고 <b>▶ 말하기</b>로 이어 말해요. (예: 물 + 더 + 주세요)</p></div></div>
+
+          <div class="m-step"><span class="m-num">5</span><div>
+            <b>화면 잠그기 (아이에게 주기 전)</b>
+            <p><b>보호자 설정 → 🔒 잠그기.</b> 잠그면 그림 소리만 되고 주제·설정은 잠겨요. <b>풀 때는 로고 "마음톡"을 2초 길게</b> 누르세요.</p></div></div>
+
+          <div class="m-step"><span class="m-num">6</span><div>
+            <b>홈 화면에 앱처럼 설치</b>
+            <p>브라우저 <b>공유</b> → <b>"홈 화면에 추가"</b> 를 누르면 앱처럼 열려요. <b>인터넷이 없어도</b> 작동해요.</p></div></div>
+
+          <div class="m-tip"><b>💡 소리가 안 나면?</b> 폰의 <b>무음(진동) 모드</b>를 풀고 볼륨을 올려 주세요. 첫 소리는 화면을 한 번 눌러야 나올 수 있어요.</div>
+        </div>
+        <button class="manual-done" data-role="close-manual">시작하기</button>
+      </div>
+    </div>` : "";
+
   const voiceBarHTML = sel
     ? `${pictogramHTML(sel)}<div><small>내가 말했어요</small><strong>${sel.label}</strong></div><button data-role="replay" aria-label="선택한 말 다시 듣기">▶<span>다시 듣기</span></button>`
     : `<span class="tap-hand">☝️</span><div><small>그림을 누르면</small><strong>소리로 말해줘요</strong></div>`;
@@ -474,7 +536,7 @@ function render(){
       </section>
       <aside class="essential-bar" aria-label="항상 사용하는 말">${essentialHTML}</aside>
       <nav class="bottom-nav" aria-label="말하기 주제">${navHTML}</nav>
-    </main>`;
+    </main>${manualHTML}`;
 }
 
 /* ---------- 이벤트 (위임) ---------- */
@@ -492,6 +554,9 @@ document.getElementById("app").addEventListener("click", (e)=>{
   else if(role==="remove-recording"){ removeRecording(); }
   else if(role==="nav"){ if(state.locked) return; setState({ activeId:id, selected:null }); }
   else if(role==="toggle-lock"){ setState({ locked:true, guide:false, notice:"" }); }
+  else if(role==="open-manual"){ setState({ manual:true, guide:false }); }
+  else if(role==="close-manual"){ try{ localStorage.setItem("maeumtalk-seen-manual","1"); }catch{} setState({ manual:false }); }
+  else if(role==="manual-backdrop"){ if(e.target===el){ try{ localStorage.setItem("maeumtalk-seen-manual","1"); }catch{} setState({ manual:false }); } }
   else if(role==="toggle-sentence"){ setState({ sentenceMode:!state.sentenceMode, sentence:[], selected:null }); }
   else if(role==="add-func"){ const f = funcWords.find(x=>x.id===id); if(f) addWord({ id:f.id, word:f.word, icon:f.icon }); }
   else if(role==="speak-sentence"){ speakSentence(); }
@@ -514,6 +579,9 @@ function startHold(e){
 function cancelHold(){ if(holdTimer){ clearTimeout(holdTimer); holdTimer = null; } }
 appEl.addEventListener("pointerdown", startHold);
 ["pointerup","pointerleave","pointercancel"].forEach(ev=> appEl.addEventListener(ev, cancelHold));
+
+/* 처음 여는 양육자에게 사용법 자동 안내 */
+try { if(!localStorage.getItem("maeumtalk-seen-manual")) setState({ manual:true }); } catch {}
 
 render();
 
