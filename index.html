@@ -208,6 +208,23 @@ async function deleteVoice(id){
     tx.oncomplete = ()=> resolve();
   });
 }
+async function countVoices(){
+  try {
+    const db = await openVoiceDB();
+    return await new Promise((resolve)=>{
+      const r = db.transaction("voices").objectStore("voices").count();
+      r.onsuccess = ()=> resolve(r.result); r.onerror = ()=> resolve(0);
+    });
+  } catch { return 0; }
+}
+async function clearAllVoices(){
+  const db = await openVoiceDB();
+  return new Promise((resolve)=>{
+    const tx = db.transaction("voices","readwrite");
+    tx.objectStore("voices").clear();
+    tx.oncomplete = ()=> resolve();
+  });
+}
 
 /* ---------- 음성 재생 ---------- */
 // 남성·자연스러운 한국어 음성 선택. 기기에 남성 음성이 있으면 우선 사용,
@@ -291,7 +308,7 @@ function pictogramHTML(card){
 
 /* ---------- 상태 ---------- */
 const state = { activeId:"daily", selected:null, guide:false, recording:false, hasRecording:false, notice:"",
-                sentenceMode:false, sentence:[], speaking:false };
+                sentenceMode:false, sentence:[], speaking:false, recordedCount:0 };
 let recorder = null;
 let chunks = [];
 
@@ -391,6 +408,7 @@ function render(){
         <button data-role="record-toggle" ${sel?"":"disabled"} class="${state.recording?"recording":""}">${state.recording?"■ 저장":"● 녹음"}</button>
       </div>
       ${sel && state.hasRecording ? `<div class="saved-row"><button data-role="play-recording">▶ 녹음 듣기</button><button data-role="remove-recording">녹음 지우기</button></div>` : ""}
+      ${state.recordedCount > 0 ? `<div class="record-row"><span>저장된 녹음 ${state.recordedCount}개 — 이게 있으면 기본 음성 대신 재생돼요</span><button data-role="clear-all-recordings">전체 지우기</button></div>` : ""}
       ${state.notice ? `<small>${state.notice}</small>` : ""}
     </section>` : "";
 
@@ -454,7 +472,8 @@ document.getElementById("app").addEventListener("click", (e)=>{
   if(!el) return;
   const role = el.getAttribute("data-role");
   const id = el.getAttribute("data-id");
-  if(role==="toggle-guide"){ setState({ guide:!state.guide }); }
+  if(role==="toggle-guide"){ const opening=!state.guide; setState({ guide:opening }); if(opening){ countVoices().then(n=> setState({ recordedCount:n })); } }
+  else if(role==="clear-all-recordings"){ clearAllVoices().then(()=> setState({ recordedCount:0, hasRecording:false, notice:"저장된 녹음을 모두 지웠어요. 이제 기본 음성으로 들려요." })); }
   else if(role==="choose"){ const card = findCard(id); if(card) choose(card); }
   else if(role==="replay"){ if(state.selected) playCard(state.selected); }
   else if(role==="record-toggle"){ state.recording ? stopRecording() : startRecording(); }
